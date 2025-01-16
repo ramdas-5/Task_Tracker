@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentTaskId = null; // Track the task being edited
 
+    const baseURL = "https://task-tracker-6j2e.onrender.com"; // Deployed backend URL
+
     // Fetch tasks based on priority filter
     const fetchTasks = async (priority = 'all') => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/tasks?priority=${priority}`);
+            const response = await axios.get(`${baseURL}/api/tasks?priority=${priority}`);
             const tasks = response.data;
             renderTasks(tasks);
         } catch (error) {
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Edit task
     window.editTask = (id) => {
         currentTaskId = id; // Set the current task ID to edit
-        axios.get(`http://localhost:5000/api/tasks/${id}`)
+        axios.get(`${baseURL}/api/tasks/${id}`)
             .then(response => {
                 const task = response.data;
                 document.getElementById('edit-task-name').value = task.name;
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Update existing task
-            const response = await axios.put(`http://localhost:5000/api/tasks/${currentTaskId}`, {
+            const response = await axios.put(`${baseURL}/api/tasks/${currentTaskId}`, {
                 name,
                 description,
                 priority,
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Delete task
     window.deleteTask = (id) => {
         if (confirm('Are you sure you want to delete this task?')) {
-            axios.delete(`http://localhost:5000/api/tasks/${id}`)
+            axios.delete(`${baseURL}/api/tasks/${id}`)
                 .then(response => {
                     alert('Task deleted successfully');
                     fetchTasks();  // Refresh task list after deletion
@@ -121,13 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchTasks();
 });
 
-
-
-
-
-
-
+// Theme toggle
 const checkbox = document.getElementById("checkbox")
 checkbox.addEventListener("change", () => {
   document.body.classList.toggle("dark")
-})
+});
